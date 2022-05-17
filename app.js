@@ -85,15 +85,14 @@ class BlobMap {
     }
 
     if (
-      corner.length &&
       edges.filter(([x, y]) => this.getBit(x1 * 3 + 1 + x, y1 * 3 + 1 + y))
         .length >= 2
     ) {
       console.log('---', [x1, y1], [x2, y2])
       console.log(corner)
 
-      for (const c of corner) {
-        this.setBit(x1 * 3 + 1 + c[0], y1 * 3 + 1 + c[1])
+      for (const [a, b] of [...corner, ...edges]) {
+        this.setBit(x1 * 3 + 1 + a, y1 * 3 + 1 + b)
       }
     }
   }
