@@ -5,21 +5,21 @@ const ctx = canvas.getContext('2d')
 const colors = ['green', 'brown']
 
 // [
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [1, 1, 0, 0, 1, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0,  0, 0, 0,  0, 0, 0],
+//   [1, 1, 0,  0, 1, 0,  0, 0, 0],
+//   [0, 0, 0,  0, 0, 0,  0, 0, 0],
 
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0,  0, 0, 0,  0, 0, 0],
+//   [0, 0, 0,  0, 0, 0,  0, 0, 0],
+//   [0, 0, 0,  0, 0, 0,  0, 0, 0],
 
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 1],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0,  0, 0, 0,  0, 0, 0],
+//   [0, 0, 0,  0, 0, 0,  0, 0, 1],
+//   [0, 0, 0,  0, 0, 0,  0, 0, 0],
 
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0,  0, 0, 0,  0, 0, 0],
+//   [0, 0, 0,  0, 0, 0,  0, 0, 0],
+//   [0, 0, 0,  0, 0, 0,  0, 0, 0],
 // ]
 
 class BlobMap {
@@ -63,11 +63,51 @@ class BlobMap {
   /**
    * If corner already has at least 3 surrounding edges, fill
    * the corner and any remaining edges.
-   * @param corner {[number, number]}
+   * @param start {[number, number]}
+   * @param end {[number, number]}
    */
-  fillCorner = (corner) => {
-    const edges = this.getAdjacent(corner)
-    console.log('edges:', edges)
+  fillCorners = ([x1, y1], [x2, y2]) => {
+    const corner = []
+    const edges = []
+
+    if (x1 < x2) {
+      corner.push([1, -1], [1, -2], [2, -1], [2, -2])
+      edges.push([0, -1], [3, -1], [1, -3])
+    } else if (x1 > x2) {
+      corner.push([-1, -1], [-1, -2], [-2, -1], [-2, -2])
+      edges.push([0, -1], [-3, -1], [-1, -3])
+    } else if (y1 < y2) {
+      corner.push([-1, 1], [-2, 1], [-1, 2], [-2, 2])
+      edges.push([-1, 0], [-1, 3], [-3, 1])
+    } else if (y1 > y2) {
+      corner.push([-1, -1], [-2, -1], [-1, -2], [-2, -2])
+      edges.push([-1, 0], [-1, -3], [-3, -1])
+    }
+
+    if (
+      corner.length &&
+      edges.filter(([x, y]) => this.getBit(x1 * 3 + 1 + x, y1 * 3 + 1 + y))
+        .length >= 2
+    ) {
+      console.log('---', [x1, y1], [x2, y2])
+      console.log(corner)
+
+      for (const c of corner) {
+        this.setBit(x1 * 3 + 1 + c[0], y1 * 3 + 1 + c[1])
+      }
+    }
+  }
+
+  getBit = (x, y) => {
+    return x >= 0 && x < this.width * 3 && y >= 0 && y < this.height * 3
+      ? this.data[y][x]
+      : 0
+  }
+
+  setBit = (x, y) => {
+    if (x >= 0 && x < this.width * 3 && y >= 0 && y < this.height * 3) {
+      this.data[y][x] = 1
+    }
   }
 
   /**
@@ -98,8 +138,12 @@ class BlobMap {
 
     for (const x of xs) {
       for (const y of ys) {
-        this.data[y][x] = 1
+        this.setBit(x, y)
       }
+    }
+
+    if (end) {
+      this.fillCorners(start, end)
     }
   }
 
