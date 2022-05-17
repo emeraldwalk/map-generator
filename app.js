@@ -1,7 +1,6 @@
 /** @type HTMLCanvasElement */
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
-// ctx.translate(0.5, 0.5)
 
 const colors = ['green', 'brown']
 
@@ -160,35 +159,14 @@ class BlobMap {
 }
 
 const map = new BlobMap(20, 20, 24)
-map.generate()
-renderMap(map)
+document.getElementById('refresh').onclick = refresh
 
-/** Create an empty map. */
-// function createEmptyMap(columns, rows) {
-//   const map = []
+refresh()
 
-//   for (let r = 0; r < rows; ++r) {
-//     for (let i = 0; i < 3; ++i) {
-//       const row = []
-
-//       for (let c = 0; c < columns; ++c) {
-//         for (let j = 0; j < 3; ++j) {
-//           row.push(0)
-//         }
-//       }
-
-//       map.push(row)
-//     }
-//   }
-
-//   return map
-// }
-
-// function generateMap(columns, rows) {
-//   const map = createEmptyMap(10, 10)
-
-//   return map
-// }
+function refresh() {
+  map.generate()
+  renderMap(map)
+}
 
 function randomI(i) {
   return Math.floor(Math.random() * i)

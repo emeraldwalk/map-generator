@@ -4,21 +4,41 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Map Generator</title>
+    <title>Blob Tile - Maze Generator</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans"
+      rel="stylesheet"
+    />
     <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        font-family: 'Open Sans', sans-serif;
+        gap: 8px;
+      }
+      h1 {
+        margin: 0;
+      }
+      button {
+        width: 100px;
+      }
       canvas {
         background-color: #ccc;
-        width: 800px;
-        height: 800px;
-        image-rendering: -moz-crisp-edges;
-        image-rendering: -webkit-crisp-edges;
-        image-rendering: pixelated;
-        image-rendering: crisp-edges;
+        width: 480px;
+        height: 480px;
       }
     </style>
   </head>
   <body>
-    <canvas id="canvas" width="800" height="800"></canvas>
+    <h1>Blob Tile - Maze Generator</h1>
+    <p>
+      Blob tileset maze generation based on information here
+      <a target="_blank" href="http://www.cr31.co.uk/stagecast/wang/blob.html"
+        >Blob Tileset</a
+      >.
+    </p>
+    <button id="refresh">Generate</button>
+    <canvas id="canvas" width="480" height="480"></canvas>
     <script src="app.js"></script>
   </body>
 </html>
